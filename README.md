@@ -2,7 +2,7 @@
 
 Find the timestamps of recent user sessions on a Linux box by reading from /var/log/wtmp.
 
-**Why?** *Isn't this already handled by `last`?* I was upset that the output of `last` wasn't easily parseable by shell scripts, so I wrote this instead, which is more flexible for my scripting use cases.
+**Why?** *Isn't this already handled by [last](https://linux.die.net/man/1/last)?* I was upset that the output of last wasn't easily parseable by shell scripts, so I wrote this instead, which is more flexible for my scripting use cases.
 
 **Usage:** `sessions [options] <username>`
 
