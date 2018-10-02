@@ -11,6 +11,7 @@
 
 #define _GNU_SOURCE
 
+#include <errno.h>
 #include <getopt.h>
 #include <pwd.h>
 #include <stdbool.h>
@@ -315,19 +316,30 @@ int main(int argc, char **argv) {
     }
 
     if (argc - optind != 1) {
+        fprintf(stderr, "Missing username.\n");
         print_usage();
         return 2;
     }
 
-    username = argv[optind];
-    if (strlen(username) > 32) {
-        fprintf(stderr, "Maximum username length is 32 bytes\n");
+    if (exclude_active && exclude_inactive) {
+        fprintf(stderr, "Cannot exclude both active and inactive sessions.\n");
         return 1;
     }
 
+    username = argv[optind];
+    if (strlen(username) > 32) {
+        fprintf(stderr, "Maximum username length is 32 bytes.\n");
+        return 1;
+    }
+
+    errno = 0;
     pw = getpwnam(username);
     if (pw == NULL) {
-        perror("Unknown username");
+        if (errno) {
+            perror("Unknown username");
+        } else {
+            fprintf(stderr, "Unknown username: %s\n", username);
+        }
         return 1;
     }
 
